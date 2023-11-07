@@ -3,8 +3,15 @@ from player import Player
 from enemy import Enemy
 import random
 
+RED = (0, 0, 0)
+
 def main(status, score):
     pygame.init() # Initializing the pygame.
+    pygame.mixer.init() # Initializing the music.
+
+    # Loading and playing the music.
+    pygame.mixer.music.load("songs/music.mp3")
+    pygame.mixer.music.play(-1)
 
     # Defining the game's font.
     font = pygame.font.Font(None, 50)
@@ -13,6 +20,9 @@ def main(status, score):
     screen_width = 500
     screen_height = 700
     screen = pygame.display.set_mode((screen_width, screen_height))
+
+    # Loading the thumb for the game
+    thumb = pygame.image.load("images/thumb.jpeg")
 
     # Putting the title from the game.
     pygame.display.set_caption("Runner Taxi Game")
@@ -38,8 +48,9 @@ def main(status, score):
 
         if game_status == starting_status:
             # Defining the menu content.
-            play_text = font.render("Play", True, (255, 255, 255))
-            credit_text = font.render("Credits", True, (255, 255, 255))
+            play_text = font.render("Play", True, RED)
+            credit_text = font.render("Credits", True, RED)
+            
 
             # Creating rectangles to verify the clicks.
             play_rect = play_text.get_rect(center=(250, 500))
@@ -56,10 +67,8 @@ def main(status, score):
                         elif credit_rect.collidepoint(event.pos):
                             game_status = main(credit_status, 0)
 
-                # Cleaning the screen.
-                screen.fill((0,0,0))
-
                 # Putting the menu in screen.
+                screen.blit(thumb, (0,0))
                 screen.blit(play_text, play_rect)
                 screen.blit(credit_text, credit_rect)
         
@@ -67,6 +76,11 @@ def main(status, score):
                 pygame.display.update()
 
         elif game_status == playing_status:
+
+            # Putting the collision song.
+            pygame.mixer.music.load("songs/car.mp3")
+            pygame.mixer.music.play(-1)
+
             # Creating the player and enemy.
             player = Player(screen)
 
@@ -83,13 +97,14 @@ def main(status, score):
                     if event.type == pygame.QUIT:
                         running = False
                 
-                # Putting the logic from movimentation.
+                # Putting the logic from movimenrandom()tation.
                 keys = pygame.key.get_pressed()
                 player.move(keys)
                 player.out()
 
                 # Cleaning the screen.
-                screen.fill((0,0,0))
+                background_01 = pygame.image.load("images/road.jpeg")
+                screen.blit(background_01, (0, 0))
 
                 # Putting the player in screen.
                 player.draw()
@@ -110,7 +125,9 @@ def main(status, score):
 
                     # Checking the collision with enemies.
                     if player.rect.colliderect(enemy.rect):
-                        pygame.time.delay(500)
+                        crash_sound = pygame.mixer.Sound("songs/crash.mp3")
+                        crash_sound.play()
+                        pygame.time.delay(1000)
                         game_status = main(gameover_status, score)
 
                 # Showing the score in screen.
@@ -122,9 +139,9 @@ def main(status, score):
     
         elif game_status == credit_status:
             # Defining the menu content.
-            credits_text = font.render("Made by José Erivan", True, (255, 255, 255))
-            credits_text_02 = font.render("to CS50", True, (255, 255, 255))
-            back_text = font.render("Return", True, (255, 255, 255))
+            credits_text = font.render("Made by José Erivan", True, RED)
+            credits_text_02 = font.render("to CS50", True, RED)
+            back_text = font.render("Return", True, RED)
 
             # Creating rectangles to verify the clicks.
             credits_rect = credits_text.get_rect(center=(250, 400))
@@ -144,6 +161,7 @@ def main(status, score):
                 screen.fill((0,0,0))
 
                 # Putting the menu in screen.
+                screen.blit(thumb, (0,0))
                 screen.blit(credits_text, credits_rect)
                 screen.blit(credits_text_02, credits_rect_02)
                 screen.blit(back_text, back_rect)
@@ -153,10 +171,10 @@ def main(status, score):
         
         elif game_status == gameover_status:
             # Defining the menu content.
-            gameover_text = font.render("GAME OVER", True, (255, 255, 255))
-            play_again_text = font.render("Play Again", True, (255, 255, 255))
-            quit_text = font.render("Quit", True, (255, 255, 255))
-            gameover_score_text = font.render(f"Score: {score}", True, (255, 255, 255))
+            gameover_text = font.render("GAME OVER", True, RED)
+            play_again_text = font.render("Play Again", True, RED)
+            quit_text = font.render("Quit", True, RED)
+            gameover_score_text = font.render(f"Score: {score}", True, RED)
 
             # Creating rectangles to verify the clicks.
             gameover_rect = gameover_text.get_rect(center=(250, 400))
@@ -179,6 +197,7 @@ def main(status, score):
                 screen.fill((0,0,0))
 
                 # Putting the menu in screen.
+                screen.blit(thumb, (0,0))
                 screen.blit(gameover_text, gameover_rect)
                 screen.blit(gameover_score_text, gameover_score_rect)
                 screen.blit(play_again_text, play_again_rect)

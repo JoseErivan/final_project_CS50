@@ -9,7 +9,8 @@ class Enemy:
         self.y = y
         self.velocity = random.randint(5, 20)
         self.screen = screen
-        self.rect = pygame.Rect(self.x, self.y, self.size, self.size) # This rect is utilized to check the colllision.
+        self.rect = pygame.Rect(self.x, self.y, 64, self.size) # This rect is utilized to check the colllision.
+        self.image = pygame.image.load("images/enemy.png")
 
     # Function to move the enemies.
     def move(self):
@@ -23,4 +24,5 @@ class Enemy:
 
     # Function to draw enemy.
     def draw(self):
-        pygame.draw.rect(self.screen, (255,0,0), (self.x, self.y, self.size, self.size))
+        self.screen.blit(self.image, (self.x, self.y))
+        # pygame.draw.rect(self.screen, (255,0,0), (self.x, self.y, self.size, self.size))

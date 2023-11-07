@@ -8,7 +8,8 @@ class Player:
         self.y = 600
         self.velocity = 10
         self.screen = screen
-        self.rect = pygame.Rect(self.x, self.y, self.size, self.size) # This rect is utilized to check the colllision.
+        self.rect = pygame.Rect(self.x, self.y, 64, self.size) # This rect is utilized to check the colllision.
+        self.image = pygame.image.load("images/car.png")
     
     # Function to move the player.
     def move(self, keys):
@@ -28,4 +29,5 @@ class Player:
 
     # Function to draw player.
     def draw(self):
-        pygame.draw.rect(self.screen, (0,0,255), (self.x, self.y, self.size, self.size))
+        self.screen.blit(self.image, (self.x, self.y))
+        # pygame.draw.rect(self.screen, (0,0,255), (self.x, self.y, self.size, self.size))
